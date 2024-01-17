@@ -91,6 +91,12 @@ setInterval(function () {
 
 // GET /investigations route
 app.get('/investigations', (req, res) => {
+    // Introduce a 1% chance to fail with a 500 error
+    if (Math.random() < 0.01) {
+        res.status(500).send('Internal Server Error');
+        return;
+    }
+
     const { source, severity, determination, page = 1 } = req.query;
     const id = parseInt(req.query.id);
     const pageSize = 10;
