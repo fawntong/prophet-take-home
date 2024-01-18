@@ -81,7 +81,7 @@ function generateInvestigations() {
 let investigations = generateInvestigations();
 
 // Schedule new investigations to be added every few minutes
-const newInvestigationInterval = 2 * 60 * 1000; // 2 minutes, for example
+const newInvestigationInterval = 10 * 1000; // ~10 seconds, for example
 setInterval(function () {
     let investigation = generateInvestigation(Math.floor(Math.random() * 5000) + 1000)
     investigations.push(investigation)
