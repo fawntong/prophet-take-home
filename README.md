@@ -47,3 +47,10 @@ type Investigation {
   determination: string, (['True positive', 'False positive', 'In progress', 'Closed']),
   readyForReview: string (['Yes', 'No'])
 }
+
+# notes
+
+some edge cases that should be handled by server:
+- duplicate ids
+- pagination
+- total investigations

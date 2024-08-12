@@ -1,13 +1,9 @@
-import axios from 'axios';
+export interface FetchState {
+    loading: boolean;
+    error: string | null;
+}
 
-const PORT = 3000;
-
-export const fetchInvestigations = async () => {
-    try {
-        await axios.get("/investigations").then((data) => {
-            console.log("DATA", data);
-        })
-    } catch (e) {
-        console.error("ERROR", e);
-    }
+export const INITIAL_FETCH_STATE: FetchState =  {
+    loading: false,
+    error: null,
 }
