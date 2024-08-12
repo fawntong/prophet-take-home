@@ -3,14 +3,14 @@ import {useEffect, useState} from "react";
 import { useImmer } from "use-immer";
 import {FetchState, INITIAL_FETCH_STATE} from "./fetch-utils";
 
-enum InvestigationSeverity {
+export enum InvestigationSeverity {
     LOW = "Low",
     MED = "Medium",
     HIGH = "High",
     CRIT = "Critical",
 }
 
-enum InvestigationDetermination {
+export enum InvestigationDetermination {
     TRUE = "True positive",
     FALSE = "False positive",
     PENDING = "In progress",
@@ -18,7 +18,7 @@ enum InvestigationDetermination {
 }
 
 // TODO: how to make this extensible?
-interface Investigation {
+export interface Investigation {
     id: number,
     title: string,
     source: string, //'AWS' | 'Azure' | 'Crowdstrike' | 'SentinelOne' | 'Okta',
@@ -36,6 +36,7 @@ export const useFetchInvestigations = (): {
 } => {
     const [investigations, setInvestigations] = useState<Investigation[]>([]);
     const [fetchState, setFetchState] = useImmer<FetchState>(INITIAL_FETCH_STATE);
+    console.log(fetchState);
 
     useEffect(() => {
         setFetchState(INITIAL_FETCH_STATE);
@@ -48,6 +49,10 @@ export const useFetchInvestigations = (): {
                 setInvestigations(parseData(data.data));
                 setFetchState(draft => {
                     draft.loading = false;
+                })
+            }).catch(e => {
+                setFetchState(draft => {
+                    draft.error = e;
                 })
             })
         } catch (e) {

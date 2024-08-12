@@ -1,13 +1,11 @@
-import {Button, Flex, Heading, Table, Text} from "@radix-ui/themes";
 import React from "react";
-import {useFetchInvestigations} from "../../lib/fetch-investigations";
 import {InvestigationsTable} from "./components/InvestigationsTable";
+import {PageWrapper} from "../../components/PageWrapper";
 
 export const InvestigationsPage: React.FC = () => {
     return (
-        <>
-            <Heading>Investigations</Heading>
+        <PageWrapper pageHeading="Investigations">
             <InvestigationsTable />
-        </>
+        </PageWrapper>
     )
 }
