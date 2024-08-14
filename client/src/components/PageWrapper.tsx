@@ -1,6 +1,5 @@
 import React, {PropsWithChildren} from "react";
-import {Heading, Tooltip} from "@radix-ui/themes";
-import {UserAvatar} from "./UserAvatar";
+import {Heading} from "@radix-ui/themes";
 
 interface Props {
     pageHeading: string;

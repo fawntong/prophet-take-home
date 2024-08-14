@@ -88,6 +88,7 @@ export const useFetchInvestigations = (filters?: InvestigationFilters): {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseData = (data: any): Investigation[] => {
     if (!Array.isArray(data)) {
         throw new Error("Expected array");
@@ -107,6 +108,7 @@ const parseData = (data: any): Investigation[] => {
     }));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseSeverity = (sev: any): InvestigationSeverity => {
     if (typeof sev !== "string") {
         throw new Error("Expected severity to be a string but got " + typeof sev);
@@ -121,6 +123,7 @@ const parseSeverity = (sev: any): InvestigationSeverity => {
     return parsedSev;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseDetermination = (det: any): InvestigationDetermination => {
     if (typeof det !== "string") {
         throw new Error("Expected determination to be a string but got " + typeof det);
@@ -135,6 +138,7 @@ const parseDetermination = (det: any): InvestigationDetermination => {
     return parsedDet;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseSource = (source: any): InvestigationSource => {
     if (typeof source !== "string") {
         throw new Error("Expected source to be a string but got " + typeof source);

@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {
     InvestigationDetermination,
     InvestigationFilters,
     InvestigationSeverity,
     InvestigationSource
 } from "../lib/fetch-investigations";
-import {Badge, Box, Button, Checkbox, DropdownMenu, IconButton} from "@radix-ui/themes";
+import {Badge, Button, DropdownMenu, IconButton} from "@radix-ui/themes";
 import {MixerHorizontalIcon, Cross1Icon} from '@radix-ui/react-icons'
 
 interface Props {
@@ -130,7 +130,7 @@ const FilterBadge: React.FC<{
                 )}
             </DropdownMenu.Content>
         </DropdownMenu.Root>
-            <IconButton size="1" radius="none" variant="soft" onClick={(e) => {
+            <IconButton size="1" radius="none" variant="soft" onClick={() => {
                 console.log("clicked close");
                 removeFilter(filter)}}>
                 <Cross1Icon width="10" height="10" />
