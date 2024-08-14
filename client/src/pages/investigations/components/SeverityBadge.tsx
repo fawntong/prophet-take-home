@@ -1,5 +1,5 @@
 import React from "react";
-import {InvestigationSeverity} from "../../../lib/fetch-investigations";
+import {InvestigationSeverity} from "../lib/fetch-investigations";
 import {Badge, BadgeProps} from "@radix-ui/themes";
 import {checkExhaustive} from "../../../lib/ts-utils";
 

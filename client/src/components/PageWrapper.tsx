@@ -8,7 +8,7 @@ interface Props {
 
 export const PageWrapper: React.FC<PropsWithChildren<Props>> = ({pageHeading, children}) => {
     return (
-        <div className="flex flex-col items-center w-full h-full mt-4">
+        <div className="flex flex-col items-center w-full h-full mt-8">
             <div className="container">
                 <Heading className="mb-4">{pageHeading}</Heading>
                 {children}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useEffect, useState} from "react";
 import { useImmer } from "use-immer";
-import {FetchState, INITIAL_FETCH_STATE} from "./fetch-utils";
+import {FetchState, INITIAL_FETCH_STATE} from "../../../lib/fetch-utils";
 
 export enum InvestigationSeverity {
     LOW = "Low",
@@ -17,11 +17,19 @@ export enum InvestigationDetermination {
     CLOSED = "Closed",
 }
 
+export enum InvestigationSource {
+    AWS = "AWS",
+    AZURE = "Azure",
+    CROWDSTRIKE = "Crowdstrike",
+    SENTINEL_ONE = "SentinelOne",
+    OKTA = "Okta"
+}
+
 // TODO: how to make this extensible?
 export interface Investigation {
     id: number,
     title: string,
-    source: string, //'AWS' | 'Azure' | 'Crowdstrike' | 'SentinelOne' | 'Okta',
+    source: InvestigationSource, //'AWS' | 'Azure' | 'Crowdstrike' | 'SentinelOne' | 'Okta',
     alertFiredTimestamp: Date,
     lastUpdatedTimestamp: Date,
     severity: InvestigationSeverity,
@@ -30,7 +38,14 @@ export interface Investigation {
     readyForReview: boolean,
 }
 
-export const useFetchInvestigations = (): {
+export interface InvestigationFilters {
+    source?: string;
+    severity?: InvestigationSeverity;
+    id?: number,
+    determination?: InvestigationDetermination;
+}
+
+export const useFetchInvestigations = (filters?: InvestigationFilters): {
     investigations: Investigation[],
     loading: boolean,
 } => {
@@ -42,7 +57,9 @@ export const useFetchInvestigations = (): {
         setFetchState(INITIAL_FETCH_STATE);
         // TODO: set up subscription? observable?
         try {
-            axios.get("/investigations").then((data) => {
+            axios.get("/investigations", {
+                params: filters
+            }).then((data) => {
                 // TODO: do something with status
                 // TODO: check bad response case
                 // TODO: check what happens if something goes wrong while parsing
@@ -63,7 +80,7 @@ export const useFetchInvestigations = (): {
             // })
             console.error("ERROR", e);
         }
-    }, []);
+    }, [filters]);
 
     return {
         investigations,
@@ -80,7 +97,7 @@ const parseData = (data: any): Investigation[] => {
     return data.map(item => ({
         id: item.id,
         title: item.title,
-        source: item.source,
+        source: parseSource(item.source),
         alertFiredTimestamp: new Date(item.alertFiredTimestamp), // TODO: verify these dates are correct
         lastUpdatedTimestamp: new Date(item.lastUpdatedTimestamp),
         severity: parseSeverity(item.severity),
@@ -116,4 +133,18 @@ const parseDetermination = (det: any): InvestigationDetermination => {
     }
 
     return parsedDet;
+}
+
+const parseSource = (source: any): InvestigationSource => {
+    if (typeof source !== "string") {
+        throw new Error("Expected source to be a string but got " + typeof source);
+    }
+
+    const parsedSource = Object.values(InvestigationSource).find(s => s === source);
+
+    if (!parsedSource) {
+        throw new Error("Could not parse source");
+    }
+
+    return parsedSource;
 }

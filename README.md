@@ -54,3 +54,9 @@ some edge cases that should be handled by server:
 - duplicate ids
 - pagination
 - total investigations
+
+# server improvements
+- server side sorting
+- multiple filters
+- cursor based pagination?
+- include number of total investigations

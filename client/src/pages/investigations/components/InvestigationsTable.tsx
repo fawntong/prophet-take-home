@@ -1,13 +1,18 @@
-import {Badge, BadgeProps, Table} from "@radix-ui/themes";
+import {Table} from "@radix-ui/themes";
 import React from "react";
-import {InvestigationSeverity, useFetchInvestigations} from "../../../lib/fetch-investigations";
+import {
+    Investigation
+} from "../lib/fetch-investigations";
 import {UserAvatar} from "../../../components/UserAvatar";
 import {SeverityBadge} from "./SeverityBadge";
 import {DeterminationBadge} from "./DeterminationBadge";
-import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons'
+import {CheckIcon, Cross2Icon} from '@radix-ui/react-icons'
 
-export const InvestigationsTable: React.FC = () => {
-    const {investigations} = useFetchInvestigations();
+interface Props {
+    investigations: Investigation[];
+}
+
+export const InvestigationsTable: React.FC<Props> = ({investigations}) => {
     return (
             <Table.Root className="relative h-[80vh] border" layout="auto">
                 <Table.Header>
