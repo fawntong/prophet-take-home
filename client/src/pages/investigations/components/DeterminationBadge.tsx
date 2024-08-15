@@ -1,7 +1,7 @@
 import React from "react";
-import { InvestigationDetermination } from "../lib/fetch-investigations";
 import { Badge, BadgeProps } from "@radix-ui/themes";
 import { checkExhaustive } from "../../../lib/ts-utils";
+import { InvestigationDetermination } from "../lib/investigation-type";
 
 interface Props {
   determination: InvestigationDetermination;

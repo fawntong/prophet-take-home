@@ -1,12 +1,12 @@
 import { Table } from "@radix-ui/themes";
 import React from "react";
-import { Investigation } from "../lib/fetch-investigations";
 import { UserAvatar } from "../../../components/UserAvatar";
 import { SeverityBadge } from "./SeverityBadge";
 import { DeterminationBadge } from "./DeterminationBadge";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { InvestigationSortDirection } from "../lib/sort-investigations";
 import { SortButton } from "../../../components/SortButton";
+import { Investigation } from "../lib/investigation-type";
 
 interface Props {
   investigations: Investigation[];

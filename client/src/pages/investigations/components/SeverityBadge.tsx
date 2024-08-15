@@ -1,7 +1,7 @@
 import React from "react";
-import { InvestigationSeverity } from "../lib/fetch-investigations";
 import { Badge, BadgeProps } from "@radix-ui/themes";
 import { checkExhaustive } from "../../../lib/ts-utils";
+import { InvestigationSeverity } from "../lib/investigation-type";
 
 interface Props {
   severity: InvestigationSeverity;

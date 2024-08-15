@@ -2,41 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import { FetchState, INITIAL_FETCH_STATE } from "../../../lib/fetch-utils";
-
-export enum InvestigationSeverity {
-  LOW = "Low",
-  MED = "Medium",
-  HIGH = "High",
-  CRIT = "Critical",
-}
-
-export enum InvestigationDetermination {
-  TRUE = "True positive",
-  FALSE = "False positive",
-  PENDING = "In progress",
-  CLOSED = "Closed",
-}
-
-export enum InvestigationSource {
-  AWS = "AWS",
-  AZURE = "Azure",
-  CROWDSTRIKE = "Crowdstrike",
-  SENTINEL_ONE = "SentinelOne",
-  OKTA = "Okta",
-}
-
-// TODO: how to make this extensible?
-export interface Investigation {
-  id: number;
-  title: string;
-  source: InvestigationSource; //'AWS' | 'Azure' | 'Crowdstrike' | 'SentinelOne' | 'Okta',
-  alertFiredTimestamp: Date;
-  lastUpdatedTimestamp: Date;
-  severity: InvestigationSeverity;
-  analystAssigned: string;
-  determination: InvestigationDetermination;
-  readyForReview: boolean;
-}
+import {
+  Investigation,
+  InvestigationDetermination,
+  InvestigationSeverity,
+  InvestigationSource,
+} from "./investigation-type";
 
 export interface InvestigationFilters {
   source?: string;
@@ -45,23 +16,26 @@ export interface InvestigationFilters {
   determination?: InvestigationDetermination;
 }
 
-export const useFetchInvestigations = (
-  filters?: InvestigationFilters,
-): {
+export const INVESTIGATIONS_PAGE_SIZE = 10;
+
+export const useFetchInvestigations = (args: {
+  page: number;
+  filters?: InvestigationFilters;
+}): {
   investigations: Investigation[];
-  loading: boolean;
+  fetchState: FetchState;
 } => {
+  const { filters, page } = args;
+
   const [investigations, setInvestigations] = useState<Investigation[]>([]);
   const [fetchState, setFetchState] = useImmer<FetchState>(INITIAL_FETCH_STATE);
   console.log(fetchState);
 
-  useEffect(() => {
-    setFetchState(INITIAL_FETCH_STATE);
-    // TODO: set up subscription? observable?
+  const fetchInvestigations = () => {
     try {
       axios
         .get("/investigations", {
-          params: filters,
+          params: { ...filters, page },
         })
         .then((data) => {
           // TODO: do something with status
@@ -73,23 +47,30 @@ export const useFetchInvestigations = (
           });
         })
         .catch((e) => {
+          // TODO
           setFetchState((draft) => {
             draft.error = e;
           });
         });
     } catch (e) {
-      // TODO:
-      // setFetchState(draft => {
-      //     // TODO: convert to string
-      //     draft.error = e;
-      // })
+      setFetchState((draft) => {
+        draft.error =
+          "An error occurred while fetching investigations. Please try again.";
+      });
+      // TODO (prod): Send this to a logging service like Sentry rather than the console
       console.error("ERROR", e);
     }
-  }, [filters]);
+  };
+
+  useEffect(() => {
+    setFetchState(INITIAL_FETCH_STATE);
+    fetchInvestigations();
+    // TODO: set up subscription? observable?
+  }, [filters, page]);
 
   return {
     investigations,
-    loading: false,
+    fetchState,
   };
 };
 

@@ -1,14 +1,14 @@
-import {
-  Investigation,
-  InvestigationDetermination,
-  InvestigationSeverity,
-} from "./fetch-investigations";
 import { useMemo } from "react";
 import {
   compareByPredefinedOrder,
   compareTypes,
   SortDirection,
 } from "../../../lib/sort-utils";
+import {
+  Investigation,
+  InvestigationDetermination,
+  InvestigationSeverity,
+} from "./investigation-type";
 
 export interface InvestigationSortDirection {
   field: keyof Investigation;

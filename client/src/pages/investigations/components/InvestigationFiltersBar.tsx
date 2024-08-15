@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import {
-  InvestigationDetermination,
-  InvestigationFilters,
-  InvestigationSeverity,
-  InvestigationSource,
-} from "../lib/fetch-investigations";
+import { InvestigationFilters } from "../lib/fetch-investigations";
 import { Badge, Button, DropdownMenu, IconButton } from "@radix-ui/themes";
 import { MixerHorizontalIcon, Cross1Icon } from "@radix-ui/react-icons";
+import {
+  InvestigationDetermination,
+  InvestigationSeverity,
+  InvestigationSource,
+} from "../lib/investigation-type";
 
 interface Props {
   activeFilters: InvestigationFilters;
