@@ -6,7 +6,7 @@ import { InvestigationsPage } from "./pages/investigations/InvestigationsPage";
 
 function App() {
   return (
-    <Theme>
+    <Theme accentColor="violet">
       <InvestigationsPage />
     </Theme>
   );

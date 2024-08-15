@@ -6,12 +6,22 @@ import {
   useFetchInvestigations,
 } from "./lib/fetch-investigations";
 import { InvestigationFiltersBar } from "./components/InvestigationFiltersBar";
+import {
+  InvestigationSortDirection,
+  useSortInvestigations,
+} from "./lib/sort-investigations";
 
 export const InvestigationsPage: React.FC = () => {
   const [filters, setFilters] = useState<InvestigationFilters>({});
-  console.log("FILTERS", filters);
+  const [sortDirection, setSortDirection] =
+    useState<InvestigationSortDirection>({ field: "id", direction: "none" });
 
-  const { investigations } = useFetchInvestigations(filters);
+  const { investigations: fetchedInvestigations } =
+    useFetchInvestigations(filters);
+  const sortedInvestigations = useSortInvestigations(
+    fetchedInvestigations,
+    sortDirection,
+  );
 
   return (
     <PageWrapper pageHeading="Investigations">
@@ -21,7 +31,11 @@ export const InvestigationsPage: React.FC = () => {
           updateFilters={setFilters}
         />
       </div>
-      <InvestigationsTable investigations={investigations} />
+      <InvestigationsTable
+        investigations={sortedInvestigations}
+        sortDirection={sortDirection}
+        updateSortDirection={setSortDirection}
+      />
     </PageWrapper>
   );
 };
