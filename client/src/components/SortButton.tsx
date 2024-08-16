@@ -9,6 +9,9 @@ interface Props {
   disabled?: boolean;
 }
 
+/**
+ * Button for sorting a list of entities.
+ */
 export const SortButton: React.FC<Props> = ({
   sortDirection,
   updateSortDirection,

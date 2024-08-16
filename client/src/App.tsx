@@ -1,6 +1,6 @@
 import React from "react";
-import "./radix-overrides.css";
 import "@radix-ui/themes/styles.css";
+import "./radix-overrides.css";
 import { Theme } from "@radix-ui/themes";
 import { InvestigationsPage } from "./pages/investigations/InvestigationsPage";
 

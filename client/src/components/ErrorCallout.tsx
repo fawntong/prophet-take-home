@@ -7,6 +7,11 @@ interface Props {
   closeable?: boolean;
 }
 
+/**
+ * Styled wrapper around the RadixUI Callout for rendering error messages.
+ * @param errorMessage - The message to render. ErrorCallout will not render anything if a message is not given.
+ * @param closeable - Renders a button to close the Callout if true.
+ */
 export const ErrorCallout: React.FC<Props> = ({ errorMessage, closeable }) => {
   const [open, setOpen] = useState<boolean>(true);
 

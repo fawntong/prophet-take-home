@@ -78,7 +78,7 @@ export const useFetchInvestigations = (
     setFetchState((draft) => {
       draft.loading = false;
     });
-  }, [filters]);
+  }, [filters, setFetchState]);
 
   const updatePage = async (newPage: number) => {
     setFetchState((draft) => {

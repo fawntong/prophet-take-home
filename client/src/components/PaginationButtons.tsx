@@ -6,21 +6,26 @@ import { useImmer } from "use-immer";
 interface Props {
   /** 1 indexed */
   currentPage: number;
+  /** The number of items queried for each page */
   pageSize: number;
   /** The number of items currently being displayed on the page */
   numDisplayed: number;
-  maxPages?: number;
+  /** The total number of pages that can be paginated */
+  totalPages?: number;
   /** Should make sense in the phrase "Showing __ x to x" */
   entityName?: string;
   incrementPage: () => Promise<void>;
   decrementPage: () => Promise<void>;
 }
 
+/**
+ * Buttons for paginating a list of entities.
+ */
 export const PaginationButtons: React.FC<Props> = ({
   currentPage,
   pageSize,
   numDisplayed,
-  maxPages,
+  totalPages,
   entityName,
   incrementPage,
   decrementPage,
@@ -57,7 +62,7 @@ export const PaginationButtons: React.FC<Props> = ({
         </IconButton>
         <IconButton
           loading={loading.incrementing}
-          disabled={maxPages ? currentPage === maxPages - 1 : false}
+          disabled={totalPages ? currentPage === totalPages - 1 : false}
           onClick={async () => {
             setLoading((draft) => {
               draft.incrementing = true;

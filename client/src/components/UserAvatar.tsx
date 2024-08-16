@@ -5,6 +5,10 @@ interface Props {
   userName: string;
 }
 
+/**
+ * Avatar for a user. Renders with the first and last initial of the given `userName`.
+ * Colors are assigned consistently for each `userName` by hashing the name.
+ */
 export const UserAvatar: React.FC<Props> = ({ userName }) => {
   const initials = userName.split(" ").map((chunk) => chunk.slice(0, 1));
   const initialsTruncated =

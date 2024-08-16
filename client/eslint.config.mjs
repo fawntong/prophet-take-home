@@ -12,4 +12,9 @@ export default [
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   eslintConfigPrettier,
+  {
+    rules: {
+      "no-redeclare": "off",
+    }
+  }
 ];

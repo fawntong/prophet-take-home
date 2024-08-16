@@ -1,6 +1,10 @@
 export type SortDirection = "asc" | "desc" | "none";
 
 const directionOrder: SortDirection[] = ["none", "asc", "desc"];
+/**
+ * Returns the SortDirection that comes after the given `currentDirection.
+ * The order goes "none" -> "asc" -> "desc" -> "none".
+ */
 export const getNextSortDirection = (
   currentDirection: SortDirection,
 ): SortDirection => {
@@ -59,6 +63,9 @@ const compareDates = (a: Date, b: Date, direction: SortDirection) => {
 
 type AcceptedCompareType = string | number | boolean | Date;
 
+/**
+ * Helper for comparing strings, numbers, booleans, and dates by a given SortDirection, meant to be used as part of `.sort`
+ */
 export const compareTypes = (
   a: AcceptedCompareType,
   b: AcceptedCompareType,
@@ -81,6 +88,12 @@ export const compareTypes = (
   );
 };
 
+/**
+ * Helper for sorting entities into a specific order, meant ot be used as part of `.sort`
+ * @param predefinedOrder - The order in which elements should be sorted in the "asc" direction
+ * @param allowUnidentified - If true, any elements that cannot be found in the `predefinedOrder` will be sorted last
+ * in the "asc" direction. If false, an error will be thrown if elements cannot be found in the `predefinedOrder`.
+ */
 export const compareByPredefinedOrder = <T>(
   a: T,
   b: T,
