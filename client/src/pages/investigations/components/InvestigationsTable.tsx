@@ -34,7 +34,7 @@ export const InvestigationsTable: React.FC<Props> = ({
   updateSortDirection,
 }) => {
   return (
-    <Table.Root className="shadow-md" variant="surface" layout="auto">
+    <Table.Root className="shadow-sm" variant="surface" layout="auto">
       <Table.Header>
         <Table.Row>
           {COLUMNS.map(({ field, prettyName }) => {
