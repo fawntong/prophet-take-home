@@ -23,13 +23,13 @@ const getDeterminationBadgeColor = (
   determination: InvestigationDetermination,
 ): BadgeProps["color"] => {
   switch (determination) {
-    case InvestigationDetermination.TRUE:
+    case InvestigationDetermination.True:
       return "grass";
-    case InvestigationDetermination.FALSE:
+    case InvestigationDetermination.False:
       return "tomato";
-    case InvestigationDetermination.PENDING:
+    case InvestigationDetermination.Pending:
       return "amber";
-    case InvestigationDetermination.CLOSED:
+    case InvestigationDetermination.Closed:
       return "gray";
     default:
       return checkExhaustive(determination);

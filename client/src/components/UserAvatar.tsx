@@ -40,10 +40,5 @@ const generateAvatarColor = (userName: string) => {
   for (let i = 0; i < userName.length; i++) {
     hash = userName.charCodeAt(i) + ((hash << 5) - hash);
   }
-  console.log(
-    Math.abs(hash),
-    AVATAR_COLORS.length,
-    Math.abs(hash) % AVATAR_COLORS.length,
-  );
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 };

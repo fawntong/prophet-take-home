@@ -10,7 +10,7 @@ export const PageWrapper: React.FC<PropsWithChildren<Props>> = ({
   children,
 }) => {
   return (
-    <div className="flex flex-col items-center w-full h-full mt-8">
+    <div className="flex flex-col items-center w-full h-full pt-8 pb-4">
       <div className="container">
         <Heading className="mb-4">{pageHeading}</Heading>
         {children}

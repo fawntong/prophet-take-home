@@ -1,4 +1,4 @@
-import { Table } from "@radix-ui/themes";
+import { Spinner, Table } from "@radix-ui/themes";
 import React from "react";
 import { UserAvatar } from "../../../components/UserAvatar";
 import { SeverityBadge } from "./SeverityBadge";
@@ -10,6 +10,7 @@ import { Investigation } from "../lib/investigation-type";
 
 interface Props {
   investigations: Investigation[];
+  loading: boolean;
   sortDirection: InvestigationSortDirection;
   updateSortDirection: (newSortDirection: InvestigationSortDirection) => void;
 }
@@ -28,6 +29,7 @@ const COLUMNS: { field: keyof Investigation; prettyName: string }[] = [
 
 export const InvestigationsTable: React.FC<Props> = ({
   investigations,
+  loading,
   sortDirection,
   updateSortDirection,
 }) => {
@@ -35,8 +37,6 @@ export const InvestigationsTable: React.FC<Props> = ({
     <Table.Root className="relative h-[80vh] border" layout="auto">
       <Table.Header>
         <Table.Row className="bg-red-50">
-          {/* TODO: better order for columns */}
-          {/* TODO: refactor */}
           {COLUMNS.map(({ field, prettyName }) => {
             const sortDirectionForColumn =
               sortDirection.field === field ? sortDirection.direction : "none";
@@ -54,6 +54,7 @@ export const InvestigationsTable: React.FC<Props> = ({
                     updateSortDirection={(direction) =>
                       updateSortDirection({ field, direction })
                     }
+                    disabled={loading}
                   />
                 </div>
               </Table.ColumnHeaderCell>
@@ -63,8 +64,14 @@ export const InvestigationsTable: React.FC<Props> = ({
       </Table.Header>
 
       <Table.Body>
+        {loading && (
+          <Table.Row>
+            <Table.Cell colSpan={COLUMNS.length}>
+              <Spinner size="3" className="m-auto" />
+            </Table.Cell>
+          </Table.Row>
+        )}
         {investigations.map((inv) => (
-          // TODO: make this match with column order
           <Table.Row key={inv.id} className="hover:bg-gray-50">
             <Table.Cell>{inv.id}</Table.Cell>
             <Table.Cell className="font-semibold">{inv.title}</Table.Cell>

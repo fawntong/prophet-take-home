@@ -11,11 +11,13 @@ import {
 interface Props {
   activeFilters: InvestigationFilters;
   updateFilters: (newFilters: InvestigationFilters) => void;
+  disabled?: boolean;
 }
 
 export const InvestigationFiltersBar: React.FC<Props> = ({
   activeFilters,
   updateFilters,
+  disabled,
 }) => {
   const [pendingFilter, setPendingFilter] = useState<Filter | null>(null);
 
@@ -71,6 +73,7 @@ export const InvestigationFiltersBar: React.FC<Props> = ({
       <AddFilterButton
         activeFilters={activeFilters}
         setPendingFilter={setPendingFilter}
+        disabled={disabled}
       />
     </div>
   );
@@ -104,10 +107,11 @@ const FILTERABLE_COLUMNS: Record<
 const AddFilterButton: React.FC<{
   activeFilters: InvestigationFilters;
   setPendingFilter: (filterKey: Filter) => void;
-}> = ({ activeFilters, setPendingFilter }) => {
+  disabled?: boolean;
+}> = ({ activeFilters, setPendingFilter, disabled }) => {
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+      <DropdownMenu.Trigger disabled={disabled}>
         {/* TODO: fix cursor */}
         <Button>
           <MixerHorizontalIcon /> Filter <DropdownMenu.TriggerIcon />
@@ -182,10 +186,7 @@ const FilterBadge: React.FC<{
         size="1"
         radius="none"
         variant="soft"
-        onClick={() => {
-          console.log("clicked close");
-          removeFilter(filter);
-        }}
+        onClick={() => removeFilter(filter)}
       >
         <Cross1Icon width="10" height="10" />
       </IconButton>

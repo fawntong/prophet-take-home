@@ -6,11 +6,13 @@ import { ArrowDownIcon, ArrowUpIcon, DashIcon } from "@radix-ui/react-icons";
 interface Props {
   sortDirection: SortDirection;
   updateSortDirection: (newDirection: SortDirection) => void;
+  disabled?: boolean;
 }
 
 export const SortButton: React.FC<Props> = ({
   sortDirection,
   updateSortDirection,
+  disabled,
 }) => {
   const tooltipText =
     sortDirection === "asc"
@@ -26,6 +28,7 @@ export const SortButton: React.FC<Props> = ({
         variant={sortDirection === "none" ? "ghost" : "soft"}
         className={sortDirection === "none" ? "!m-0" : ""}
         onClick={() => updateSortDirection(getNextSortDirection(sortDirection))}
+        disabled={disabled}
       >
         {sortDirection === "asc" ? (
           <ArrowUpIcon width="15" height="15" />

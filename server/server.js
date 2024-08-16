@@ -97,7 +97,7 @@ app.get('/investigations', (req, res) => {
         return;
     }
 
-    const { source, severity, determination, page = 1w } = req.query;
+    const { source, severity, determination, page = 1 } = req.query;
     const id = parseInt(req.query.id);
     const pageSize = 10;
     console.log(id)

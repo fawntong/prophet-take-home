@@ -1,30 +1,35 @@
-export enum InvestigationSeverity {
-  LOW = "Low",
-  MED = "Medium",
-  HIGH = "High",
-  CRIT = "Critical",
-}
+export const InvestigationSeverity = {
+  Low: "Low",
+  Med: "Medium",
+  High: "High",
+  Crit: "Critical",
+} as const;
+export type InvestigationSeverity =
+  (typeof InvestigationSeverity)[keyof typeof InvestigationSeverity];
 
-export enum InvestigationDetermination {
-  TRUE = "True positive",
-  FALSE = "False positive",
-  PENDING = "In progress",
-  CLOSED = "Closed",
-}
+export const InvestigationDetermination = {
+  True: "True positive",
+  False: "False positive",
+  Pending: "In progress",
+  Closed: "Closed",
+} as const;
+export type InvestigationDetermination =
+  (typeof InvestigationDetermination)[keyof typeof InvestigationDetermination];
 
-export enum InvestigationSource {
-  AWS = "AWS",
-  AZURE = "Azure",
-  CROWDSTRIKE = "Crowdstrike",
-  SENTINEL_ONE = "SentinelOne",
-  OKTA = "Okta",
-}
+export const InvestigationSource = {
+  AWS: "AWS",
+  Azure: "Azure",
+  Crowdstrike: "Crowdstrike",
+  SentinelOne: "SentinelOne",
+  Okta: "Okta",
+} as const;
+export type InvestigationSource =
+  (typeof InvestigationSource)[keyof typeof InvestigationSource];
 
-// TODO: how to make this extensible?
 export interface Investigation {
   id: number;
   title: string;
-  source: InvestigationSource; //'AWS' | 'Azure' | 'Crowdstrike' | 'SentinelOne' | 'Okta',
+  source: InvestigationSource;
   alertFiredTimestamp: Date;
   lastUpdatedTimestamp: Date;
   severity: InvestigationSeverity;

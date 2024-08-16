@@ -16,131 +16,126 @@ export interface InvestigationFilters {
   determination?: InvestigationDetermination;
 }
 
+interface FetchData extends FetchState {
+  investigations: Investigation[];
+  page: number;
+  incrementPage: () => Promise<void>;
+  decrementPage: () => Promise<void>;
+}
+
 export const INVESTIGATIONS_PAGE_SIZE = 10;
 
-export const useFetchInvestigations = (args: {
-  page: number;
-  filters?: InvestigationFilters;
-}): {
-  investigations: Investigation[];
-  fetchState: FetchState;
-} => {
-  const { filters, page } = args;
-
+export const useFetchInvestigations = (
+  filters: InvestigationFilters,
+): FetchData => {
   const [investigations, setInvestigations] = useState<Investigation[]>([]);
+  const [page, setPage] = useState<number>(1);
   const [fetchState, setFetchState] = useImmer<FetchState>(INITIAL_FETCH_STATE);
-  console.log(fetchState);
 
-  const fetchInvestigations = () => {
+  const fetchInvestigations = async (
+    args: { filters: InvestigationFilters; page: number },
+    callbacks?: {
+      onSuccess?: (fetchedInvestigations: Investigation[]) => void;
+      onError?: (error: unknown) => void;
+    },
+  ) => {
     try {
-      axios
-        .get("/investigations", {
-          params: { ...filters, page },
-        })
-        .then((data) => {
-          // TODO: do something with status
-          // TODO: check bad response case
-          // TODO: check what happens if something goes wrong while parsing
-          setInvestigations(parseData(data.data));
-          setFetchState((draft) => {
-            draft.loading = false;
-          });
-        })
-        .catch((e) => {
-          // TODO
-          setFetchState((draft) => {
-            draft.error = e;
-          });
-        });
-    } catch (e) {
-      setFetchState((draft) => {
-        draft.error =
-          "An error occurred while fetching investigations. Please try again.";
+      const response = await axios.get("/investigations", {
+        params: { ...args.filters, page: args.page },
       });
+      const parsedInvestigations = parseData(response.data);
+      callbacks?.onSuccess?.(parsedInvestigations);
+    } catch (e) {
+      callbacks?.onError?.(e);
       // TODO (prod): Send this to a logging service like Sentry rather than the console
-      console.error("ERROR", e);
+      console.error("ERROR:", e);
     }
   };
 
+  // Fetch the investigations when the page loads or whenever the filters change.
+  // Since we're refetching the entire list of investigations, reset all state including the page number.
   useEffect(() => {
     setFetchState(INITIAL_FETCH_STATE);
-    fetchInvestigations();
+    setPage(1);
+    void fetchInvestigations(
+      {
+        filters,
+        page: 1,
+      },
+      {
+        onSuccess: (fetchedInvestigations) => {
+          setInvestigations(fetchedInvestigations);
+        },
+        onError: () => {
+          setFetchState((draft) => {
+            // Set a generic error message to display to users
+            draft.loadingError =
+              "An error occurred while fetching investigations. Try reloading the page.";
+          });
+        },
+      },
+    );
+    setFetchState((draft) => {
+      draft.loading = false;
+    });
     // TODO: set up subscription? observable?
-  }, [filters, page]);
+  }, [filters]);
+
+  const updatePage = async (newPage: number) => {
+    setFetchState((draft) => {
+      draft.fetchingMore = true;
+    });
+    await fetchInvestigations(
+      {
+        filters,
+        page: newPage,
+      },
+      {
+        onSuccess: (fetchedInvestigations) => {
+          if (fetchedInvestigations.length > 0) {
+            // Only update the page in state if the pagination fetch was successful
+            setPage(newPage);
+            setInvestigations(fetchedInvestigations);
+          }
+        },
+        onError: () => {
+          setFetchState((draft) => {
+            draft.fetchingMoreError =
+              "An error occurred while fetching investigations. Please try again.";
+          });
+        },
+      },
+    );
+    setFetchState((draft) => {
+      draft.fetchingMore = false;
+    });
+  };
 
   return {
+    ...fetchState,
     investigations,
-    fetchState,
+    page,
+    incrementPage: () => updatePage(page + 1),
+    decrementPage: () => updatePage(page - 1),
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseData = (data: any): Investigation[] => {
+const parseData = (data: unknown): Investigation[] => {
   if (!Array.isArray(data)) {
-    throw new Error("Expected array");
+    throw new Error("Expected data to be an array");
   }
 
-  // TODO: verify types and fields?
+  // TODO (prod): Add validation to ensure the server data matches the expected format.
+  //  Skipped for now since we can reasonably make that assumption.
   return data.map((item) => ({
     id: item.id,
     title: item.title,
-    source: parseSource(item.source),
-    alertFiredTimestamp: new Date(item.alertFiredTimestamp), // TODO: verify these dates are correct
+    source: item.source as InvestigationSource,
+    alertFiredTimestamp: new Date(item.alertFiredTimestamp),
     lastUpdatedTimestamp: new Date(item.lastUpdatedTimestamp),
-    severity: parseSeverity(item.severity),
+    severity: item.severity as InvestigationSeverity,
     analystAssigned: item.analystAssigned,
-    determination: parseDetermination(item.determination),
-    readyForReview: item.readyForReview === "Yes", // TODO: check for no?
+    determination: item.determination as InvestigationDetermination,
+    readyForReview: item.readyForReview === "Yes",
   }));
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseSeverity = (sev: any): InvestigationSeverity => {
-  if (typeof sev !== "string") {
-    throw new Error("Expected severity to be a string but got " + typeof sev);
-  }
-
-  const parsedSev = Object.values(InvestigationSeverity).find((s) => s === sev);
-
-  if (!parsedSev) {
-    throw new Error("Could not parse severity");
-  }
-
-  return parsedSev;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseDetermination = (det: any): InvestigationDetermination => {
-  if (typeof det !== "string") {
-    throw new Error(
-      "Expected determination to be a string but got " + typeof det,
-    );
-  }
-
-  const parsedDet = Object.values(InvestigationDetermination).find(
-    (d) => d === det,
-  );
-
-  if (!parsedDet) {
-    throw new Error("Could not parse determination");
-  }
-
-  return parsedDet;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseSource = (source: any): InvestigationSource => {
-  if (typeof source !== "string") {
-    throw new Error("Expected source to be a string but got " + typeof source);
-  }
-
-  const parsedSource = Object.values(InvestigationSource).find(
-    (s) => s === source,
-  );
-
-  if (!parsedSource) {
-    throw new Error("Could not parse source");
-  }
-
-  return parsedSource;
 };

@@ -15,17 +15,17 @@ export interface InvestigationSortDirection {
   direction: SortDirection;
 }
 
-const SEVERITY_ORDER = [
-  InvestigationSeverity.LOW,
-  InvestigationSeverity.MED,
-  InvestigationSeverity.HIGH,
-  InvestigationSeverity.CRIT,
+const SEVERITY_ORDER: InvestigationSeverity[] = [
+  InvestigationSeverity.Low,
+  InvestigationSeverity.Med,
+  InvestigationSeverity.High,
+  InvestigationSeverity.Crit,
 ];
-const DETERMINATION_ORDER = [
-  InvestigationDetermination.TRUE,
-  InvestigationDetermination.FALSE,
-  InvestigationDetermination.PENDING,
-  InvestigationDetermination.CLOSED,
+const DETERMINATION_ORDER: InvestigationDetermination[] = [
+  InvestigationDetermination.True,
+  InvestigationDetermination.False,
+  InvestigationDetermination.Pending,
+  InvestigationDetermination.Closed,
 ];
 
 export const useSortInvestigations = (
@@ -62,5 +62,3 @@ export const useSortInvestigations = (
 
   return sortedInvestigations;
 };
-
-// TODO: figure out why none is not changing, sort by enums

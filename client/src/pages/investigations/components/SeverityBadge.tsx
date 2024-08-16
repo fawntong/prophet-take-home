@@ -19,13 +19,13 @@ const getSeverityBadgeColor = (
   severity: InvestigationSeverity,
 ): BadgeProps["color"] => {
   switch (severity) {
-    case InvestigationSeverity.LOW:
+    case InvestigationSeverity.Low:
       return "lime";
-    case InvestigationSeverity.MED:
+    case InvestigationSeverity.Med:
       return "yellow";
-    case InvestigationSeverity.HIGH:
+    case InvestigationSeverity.High:
       return "orange";
-    case InvestigationSeverity.CRIT:
+    case InvestigationSeverity.Crit:
       return "tomato";
     default:
       return checkExhaustive(severity);

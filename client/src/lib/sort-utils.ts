@@ -93,7 +93,7 @@ export const compareByPredefinedOrder = <T>(
   if (allowUnidentified) {
     indexA = indexA === -1 ? predefinedOrder.length + 1 : indexA;
     indexB = indexB === -1 ? predefinedOrder.length + 1 : indexB;
-  } else if (indexA === -1 || indexB == -1) {
+  } else if (indexA === -1 || indexB === -1) {
     throw new Error(
       `Tried to compare elements that are not in the predefinedOrder: ${indexA === -1 ? String(a) : ""} ${indexB === -1 ? String(b) : ""}`,
     );
