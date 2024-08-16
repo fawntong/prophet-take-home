@@ -1,4 +1,4 @@
-import { Spinner, Table } from "@radix-ui/themes";
+import { Spinner, Table, Text } from "@radix-ui/themes";
 import React from "react";
 import { UserAvatar } from "../../../components/UserAvatar";
 import { SeverityBadge } from "./SeverityBadge";
@@ -68,6 +68,15 @@ export const InvestigationsTable: React.FC<Props> = ({
             </Table.Cell>
           </Table.Row>
         )}
+
+        {investigations.length === 0 && (
+          <Table.Row>
+            <Table.Cell colSpan={COLUMNS.length} className="text-center">
+              <Text>No investigations were found</Text>
+            </Table.Cell>
+          </Table.Row>
+        )}
+
         {investigations.map((inv) => (
           <Table.Row key={inv.id} className="hover:bg-gray-50" align="center">
             <Table.Cell>{inv.id}</Table.Cell>
@@ -95,8 +104,8 @@ export const InvestigationsTable: React.FC<Props> = ({
             <Table.Cell>
               {inv.readyForReview ? (
                 <CheckCircledIcon
-                  width="16"
-                  height="16"
+                  width="18"
+                  height="18"
                   className="text-green-600"
                 />
               ) : (

@@ -78,7 +78,6 @@ export const useFetchInvestigations = (
     setFetchState((draft) => {
       draft.loading = false;
     });
-    // TODO: set up subscription? observable?
   }, [filters]);
 
   const updatePage = async (newPage: number) => {

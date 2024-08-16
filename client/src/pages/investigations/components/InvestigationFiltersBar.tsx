@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { InvestigationFilters } from "../lib/fetch-investigations";
-import { Badge, Button, DropdownMenu, IconButton } from "@radix-ui/themes";
+import { Button, DropdownMenu, IconButton, TextField } from "@radix-ui/themes";
 import { MixerHorizontalIcon, Cross1Icon } from "@radix-ui/react-icons";
 import {
   InvestigationDetermination,
@@ -44,7 +44,12 @@ export const InvestigationFiltersBar: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex gap-4 items-center">
+      <AddFilterButton
+        activeFilters={activeFilters}
+        setPendingFilter={setPendingFilter}
+        disabled={disabled}
+      />
       <div className="flex gap-2">
         {Object.entries(activeFilters).map(([filter, value]) =>
           value ? (
@@ -70,26 +75,19 @@ export const InvestigationFiltersBar: React.FC<Props> = ({
           />
         )}
       </div>
-      <AddFilterButton
-        activeFilters={activeFilters}
-        setPendingFilter={setPendingFilter}
-        disabled={disabled}
-      />
     </div>
   );
 };
 
 type Filter = keyof InvestigationFilters;
 
-// TODO: move this somewhere better?
-// TODO: include times?
 const FILTERABLE_COLUMNS: Record<
   Filter,
-  { prettyName: string; options: [string, string][] | null }
+  { prettyName: string; options: string[] | null }
 > = {
   determination: {
     prettyName: "Determination",
-    options: Object.entries(InvestigationDetermination),
+    options: Object.values(InvestigationDetermination),
   },
   id: {
     prettyName: "ID",
@@ -97,13 +95,14 @@ const FILTERABLE_COLUMNS: Record<
   },
   severity: {
     prettyName: "Severity",
-    options: Object.entries(InvestigationSeverity),
+    options: Object.values(InvestigationSeverity),
   },
   source: {
     prettyName: "Source",
-    options: Object.entries(InvestigationSource),
+    options: Object.values(InvestigationSource),
   },
 };
+
 const AddFilterButton: React.FC<{
   activeFilters: InvestigationFilters;
   setPendingFilter: (filterKey: Filter) => void;
@@ -112,15 +111,12 @@ const AddFilterButton: React.FC<{
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger disabled={disabled}>
-        {/* TODO: fix cursor */}
         <Button className="cursor-pointer">
           <MixerHorizontalIcon /> Filter <DropdownMenu.TriggerIcon />
         </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content align="end">
         {Object.entries(FILTERABLE_COLUMNS).map(([key, { prettyName }]) => {
-          // TODO: message about why disabled?
-          // TODO: better way to type?
           const active = activeFilters[key as Filter] !== undefined;
           return (
             <DropdownMenu.Item
@@ -155,30 +151,38 @@ const FilterBadge: React.FC<{
   const options = FILTERABLE_COLUMNS[filter]?.options;
 
   return (
-    <div className="inline-flex rounded overflow-hidden">
+    <div className="inline-block rounded overflow-hidden">
       <DropdownMenu.Root defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
         <DropdownMenu.Trigger>
-          {/* TODO: hover color, border to separate with button, cursor, fix casing on filter name*/}
-          <Badge size="2" radius="none">
-            {filter}
+          <Button size="1" radius="none" variant="soft">
+            {FILTERABLE_COLUMNS[filter]?.prettyName}
             {filterValue && `: ${filterValue}`}
-          </Badge>
+          </Button>
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Content>
-          {options && (
-            <>
-              {/* TODO: value is maybe not needed? it's just the enum */}
-              {options.map(([value, label]) => (
-                <DropdownMenu.CheckboxItem
-                  key={value}
-                  checked={filterValue === label}
-                  onClick={() => setFilter(filter, label)}
-                >
-                  {label}
-                </DropdownMenu.CheckboxItem>
-              ))}
-            </>
+          {options &&
+            options.map((value) => (
+              <DropdownMenu.CheckboxItem
+                key={value}
+                checked={filterValue === value}
+                onClick={() => setFilter(filter, value)}
+              >
+                {value}
+              </DropdownMenu.CheckboxItem>
+            ))}
+          {!options && (
+            <TextField.Root
+              size="1"
+              placeholder="Search…"
+              onBlur={(e) => {
+                const value = e.target.value;
+                if (value) {
+                  setFilter(filter, e.target.value);
+                }
+              }}
+              autoFocus={true}
+            />
           )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
@@ -187,6 +191,7 @@ const FilterBadge: React.FC<{
         radius="none"
         variant="soft"
         onClick={() => removeFilter(filter)}
+        className="border border-l"
       >
         <Cross1Icon width="10" height="10" />
       </IconButton>
