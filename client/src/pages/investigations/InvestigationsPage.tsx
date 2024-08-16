@@ -58,7 +58,7 @@ export const InvestigationsPage: React.FC = () => {
         updateSortDirection={setSortDirection}
       />
       {!loading && (
-        <div className="mt-2 flex justify-end w-full">
+        <div className="mt-4 flex justify-end w-full">
           <PaginationButtons
             currentPage={page}
             pageSize={INVESTIGATIONS_PAGE_SIZE}

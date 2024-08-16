@@ -113,7 +113,7 @@ const AddFilterButton: React.FC<{
     <DropdownMenu.Root>
       <DropdownMenu.Trigger disabled={disabled}>
         {/* TODO: fix cursor */}
-        <Button>
+        <Button className="cursor-pointer">
           <MixerHorizontalIcon /> Filter <DropdownMenu.TriggerIcon />
         </Button>
       </DropdownMenu.Trigger>

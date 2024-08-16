@@ -3,7 +3,7 @@ import React from "react";
 import { UserAvatar } from "../../../components/UserAvatar";
 import { SeverityBadge } from "./SeverityBadge";
 import { DeterminationBadge } from "./DeterminationBadge";
-import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { CheckCircledIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { InvestigationSortDirection } from "../lib/sort-investigations";
 import { SortButton } from "../../../components/SortButton";
 import { Investigation } from "../lib/investigation-type";
@@ -34,17 +34,14 @@ export const InvestigationsTable: React.FC<Props> = ({
   updateSortDirection,
 }) => {
   return (
-    <Table.Root className="relative h-[80vh] border" layout="auto">
+    <Table.Root className="shadow-md" variant="surface" layout="auto">
       <Table.Header>
-        <Table.Row className="bg-red-50">
+        <Table.Row>
           {COLUMNS.map(({ field, prettyName }) => {
             const sortDirectionForColumn =
               sortDirection.field === field ? sortDirection.direction : "none";
             return (
-              <Table.ColumnHeaderCell
-                key={field}
-                className="sticky top-0 z-10 !bg-white"
-              >
+              <Table.ColumnHeaderCell key={field}>
                 <div className="flex items-start gap-1">
                   <span className="min-h-6 flex items-center">
                     {prettyName}
@@ -72,7 +69,7 @@ export const InvestigationsTable: React.FC<Props> = ({
           </Table.Row>
         )}
         {investigations.map((inv) => (
-          <Table.Row key={inv.id} className="hover:bg-gray-50">
+          <Table.Row key={inv.id} className="hover:bg-gray-50" align="center">
             <Table.Cell>{inv.id}</Table.Cell>
             <Table.Cell className="font-semibold">{inv.title}</Table.Cell>
             <Table.Cell>
@@ -84,15 +81,27 @@ export const InvestigationsTable: React.FC<Props> = ({
             </Table.Cell>
             <Table.Cell>
               {inv.analystAssigned ? (
-                <UserAvatar userName={inv.analystAssigned} />
+                <div className="flex gap-2 items-center">
+                  <UserAvatar userName={inv.analystAssigned} />
+                  {inv.analystAssigned}
+                </div>
               ) : (
+                // em dash
                 <>&#8212;</>
               )}
             </Table.Cell>
             <Table.Cell>{inv.alertFiredTimestamp.toLocaleString()}</Table.Cell>
             <Table.Cell>{inv.lastUpdatedTimestamp.toLocaleString()}</Table.Cell>
             <Table.Cell>
-              {inv.readyForReview ? <CheckIcon /> : <Cross2Icon />}
+              {inv.readyForReview ? (
+                <CheckCircledIcon
+                  width="16"
+                  height="16"
+                  className="text-green-600"
+                />
+              ) : (
+                <Cross2Icon width="14" height="14" className="text-gray-500" />
+              )}
             </Table.Cell>
           </Table.Row>
         ))}

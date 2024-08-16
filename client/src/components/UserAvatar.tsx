@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, AvatarProps, Tooltip } from "@radix-ui/themes";
+import { Avatar, AvatarProps } from "@radix-ui/themes";
 
 interface Props {
   userName: string;
@@ -14,15 +14,7 @@ export const UserAvatar: React.FC<Props> = ({ userName }) => {
 
   const color = generateAvatarColor(userName);
 
-  return (
-    <Tooltip content={userName}>
-      {/* This div is needed because `Tooltip` component needs to add a `data-state` attribute */}
-      {/* to its child, which `Avatar` doesn't want to accept */}
-      <div className="inline-block">
-        <Avatar fallback={initialsTruncated} color={color} />
-      </div>
-    </Tooltip>
-  );
+  return <Avatar fallback={initialsTruncated} color={color} size="1" />;
 };
 
 const AVATAR_COLORS: AvatarProps["color"][] = [

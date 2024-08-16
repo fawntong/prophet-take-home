@@ -31,7 +31,6 @@ export const PaginationButtons: React.FC<Props> = ({
   }>({ incrementing: false, decrementing: false });
 
   const start = (currentPage - 1) * pageSize + 1;
-  // TODO: need to take into account last page
   const end = start + numDisplayed - 1;
 
   return (

@@ -11,9 +11,14 @@ export const DeterminationBadge: React.FC<Props> = ({ determination }) => {
   return (
     <Badge
       color={getDeterminationBadgeColor(determination)}
-      variant="soft"
+      variant="outline"
+      radius="full"
       size="2"
     >
+      <div
+        className="w-[5px] h-[5px] rounded-full"
+        style={{ background: "var(--accent-8)" }}
+      />
       {determination}
     </Badge>
   );
